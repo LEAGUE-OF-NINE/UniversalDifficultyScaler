@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -17,8 +17,8 @@
     <OutputPath>.\Release</OutputPath>
     <NoWarn>1701;1702;2211;CA2211;IDE1006;IDE0060</NoWarn>
     <DebugType>none</DebugType>
-    <RootNamespace>MyPlugin</RootNamespace>
-    <AssemblyName>MyPlugin</AssemblyName>
+    <RootNamespace>DifficultySliderMod</RootNamespace>
+    <AssemblyName>DifficultySliderMod</AssemblyName>
     <Product>MyPlugin</Product>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -38,6 +38,13 @@
   <!-- ~~~~~ ASSEMBLY REFERENCES ~~~~~ -->
   <!-- BepinEx -->
   <ItemGroup>
+	  <Reference Include="Lethe, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+		  <SpecificVersion>False</SpecificVersion>
+		  <HintPath>D:\Zwei\game\BepInEx\plugins\Lethe.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Merged">
+		  <HintPath>D:\Zwei\game\BepInEx\plugins\Lethe.dll</HintPath>
+	  </Reference>
     <Reference Include="System.Runtime" />
     <Reference Include="$(LimbusCompanyFolder)\BepInEx\core\*.dll">
       <HintPath>%(Identity)</HintPath>
@@ -52,4 +59,10 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-</Project>
+
+	<Target Name="CopyFile" AfterTargets="build">
+		<Message Text="Copying BIE files..." Importance="high" Condition="'$(Configuration)' == 'BIE'" />
+		<Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(OutputPath)\BepInEx\plugins" Condition="'$(Configuration)' == 'BIE'" />
+		<Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(LimbusCompanyFolder)\BepInEx\plugins" Condition="'$(Configuration)' == 'BIE'" />
+	</Target>
+</Project>   
