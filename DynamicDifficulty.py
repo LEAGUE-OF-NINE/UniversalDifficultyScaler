@@ -10,6 +10,24 @@ class JsonEditorApp:
         self.root.geometry("900x600")
         self.root.bind("<Return>", self.handle_enter)
 
+        self.slider_ranges = {
+            "Negative Coin Power Up": (-5, 10),
+            "Final Power Up": (0, 20),
+            "Clash Power Up": (0, 20),
+            "Min Speed Adder": (-10, 10),
+            "Max Speed Adder": (-10, 10),
+            "Max HP Multiplier": (0.00, 5),
+            "Defense Level": (-20, 20),
+            "Offense Level": (-50, 50),
+            "Damage Taken": (0.00, 2),
+            "Damage Dealt": (0, 2),
+            "Combat Start Shield": (0, 5000),
+            "Slash Resistance": (-2.0, 2.0),
+            "Pierce Resistance": (-2.0, 2.0),
+            "Blunt Resistance": (-2.0, 2.0),
+        }
+
+
         self.data = {}
         self.entries = {}
         self.sliders = {}
@@ -46,6 +64,7 @@ class JsonEditorApp:
             os.makedirs(os.path.dirname(json_path), exist_ok=True)
 
             default_keys = [
+                "Positive Coin Power Up",
                 "Negative Coin Power Up",
                 "Final Power Up",
                 "Clash Power Up",
@@ -55,7 +74,14 @@ class JsonEditorApp:
                 "Defense Level",
                 "Offense Level",
                 "Damage Taken",
-                "Damage Dealt"
+                "Damage Dealt",
+                "Combat Start Shield",
+                "Slash Resistance",
+                "Pierce Resistance",
+                "Blunt Resistance"
+
+
+
             ]
             self.data = {key: 0 for key in default_keys}
 
@@ -91,7 +117,7 @@ class JsonEditorApp:
             if isinstance(value, (int, float)):
                 # Set default slider range: 0–200, can be adjusted
                 slider = tk.Scale(
-                    self.frame, from_=0, to=200,
+                    self.frame, from_=-50, to=200,
                     orient="horizontal", length=150,
                     resolution=0.1 if isinstance(value, float) else 1,
                 )

@@ -45,12 +45,15 @@ namespace MyPlugin
             var outer = 1;
             var inner = 0;
             FrogMain.Logg.LogMessage("Currently adding buff to " + __instance.ToString());
+            if (__instance.GetActivatedBuffStack(FrogMain.buf_keyword, false) > 0) { return; }
             __instance.AddBuff_Giver(FrogMain.buf_keyword, 1, __instance, timing, 0, 0, ABILITY_SOURCE_TYPE.PASSIVE, null, out outer, out inner);
 
             foreach (BattleUnitModel unit in battleObjectManager.GetAliveListExceptAbnormalitySelf(UNIT_FACTION.ENEMY, false))
             {
                 unit.LoseBuffAllStack(FrogMain.buf_keyword,  timing);
             }
+
+            __instance.AddShield((int)FrogMain.GlobalData.MyData["Combat Start Shield"], true, ABILITY_SOURCE_TYPE.BUFF, timing);
 
 
         }

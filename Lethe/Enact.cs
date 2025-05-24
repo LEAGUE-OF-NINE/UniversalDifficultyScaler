@@ -24,6 +24,14 @@ namespace DifficultySliderMod
             keys.Add("Defense Level");
             keys.Add("Offense Level");
             keys.Add("Damage Taken");
+            keys.Add("Damage Dealt");
+            keys.Add("Combat Start Shield");
+            keys.Add("Slash Resistance");
+            keys.Add("Pierce Resistance");
+            keys.Add("Blunt Resistance");
+
+
+
             //keys.AddItem("Negative Coin Power Up");
 
 
@@ -60,7 +68,15 @@ namespace DifficultySliderMod
                             break;
                         case "TakeAtkDamageMultiplierByStack": p.value = FrogMain.GlobalData.MyData["Damage Taken"];
                             break;
+                        case "PenanceBase": p.value = FrogMain.GlobalData.MyData["Combat Start Shield"];
+                            break;
                         case "AtkDamageMultiplierByStack": p.value = FrogMain.GlobalData.MyData["Damage Dealt"];
+                            break;
+                        case "AtkResistAdderByStack": {
+                                if (p.atk == "SLASH") { p.value = FrogMain.GlobalData.MyData["Slash Resistance"]; }
+                                else if (p.atk == "HIT") { p.value = FrogMain.GlobalData.MyData["Blunt Resistance"]; }
+                                else if (p.atk == "PENETRATE") { p.value = FrogMain.GlobalData.MyData["Pierce Resistance"]; }
+                            }
                             break;
                         default: FrogMain.Logg.LogMessage("had a failure on the switch case. INSIDE OF ENACT. FUNCTION: EnactShit()");
                             break;

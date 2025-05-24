@@ -1,0 +1,76 @@
+{
+  "list": [
+    {
+      "id": "DifficultModder",
+      "buffClass": "VolatileBuff",
+      "buffType": "Neutral",
+      "iconId": "AaCePbBi",
+      "maxStack": 1,
+      "list": [
+        {
+          "ability": "PlusCoinScaleAdder",
+          "value": 0
+        },
+        {
+          "ability": "MinusCoinScaleAdder",
+          "value": 0
+        },
+        {
+          "ability": "SkillPowerResultAdder",
+          "value": 0
+        },
+        {
+          "ability": "ParryingResultAdderAsStack",
+          "value": 0
+        },
+        {
+          "ability": "MinSpeedAdder",
+          "value": 0
+        },
+        {
+          "ability": "MaxSpeedAdder",
+          "value": 0
+        },
+        {
+          "ability": "DefaultMaxHpMultiplier",
+          "value": 0
+        },
+        {
+          "ability": "DefAdder",
+          "value": 0
+        },
+        {
+          "ability": "AtkAdder",
+          "value": 0
+        },
+        {
+          "ability": "TakeAtkDamageMultiplierByStack",
+          "value": 0.00
+        },
+        {
+          "ability": "PenanceBase",
+          "value": 0.00
+        },
+        {
+          "ability": "AtkResistAdderByStack",
+          "atk": "SLASH",
+          "value": 0
+        },
+        {
+          "ability": "AtkResistAdderByStack",
+          "atk": "HIT",
+          "value": 0
+        },
+        {
+          "ability": "AtkResistAdderByStack",
+          "atk": "PENETRATE",
+          "value": 0
+        },
+        {
+          "ability": "AtkDamageMultiplierByStack",
+          "value": 0.00
+        }
+      ]
+    }
+  ]
+}

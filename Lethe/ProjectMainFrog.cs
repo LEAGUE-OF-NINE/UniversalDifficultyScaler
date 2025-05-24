@@ -39,23 +39,8 @@ public class FrogMain : BasePlugin
         BepInEx.Logging.Logger.Sources.Add(FrogMain.Logg);
         var harmony = new Harmony(NAME);
 
-        string filepath = "BepInEx\\plugins\\data.json";
-        var keys = new List<String> { "Positive Coin Power Up" };
-        keys.Add("Negative Coin Power Up");
-        keys.Add("Final Power Up");
-        keys.Add("Clash Power Up");
-        keys.Add("Min Speed Adder");
-        keys.Add("Max Speed Adder");
-        keys.Add("Max HP Multiplier");
-        keys.Add("Defense Level");
-        keys.Add("Offense Level");
-        keys.Add("Damage Taken");
-        keys.Add("Damage Dealt");
-        //keys.AddItem("Negative Coin Power Up");
-
-
-
-        GlobalData.MyData = await CreateAndManageDict.LoadOrCreateDictionaryAsync(filepath, keys);
+        Enact.loadDict();
+        Enact.EnactShit();
 
         AddBuffs.Setup(harmony);
     }
