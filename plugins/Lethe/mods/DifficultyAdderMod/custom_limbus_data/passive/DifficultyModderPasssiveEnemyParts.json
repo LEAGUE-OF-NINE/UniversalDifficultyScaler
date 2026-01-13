@@ -1,0 +1,21 @@
+{
+  "list": [
+    {
+      "id": 14461979,
+      "attributeStockCondition": [],
+      "requireIDList": [
+        "Modular/TIMING:OSA/VALUE_0:getdata(Self,1406197901)/bonusdmg(Target,VALUE_0,-1,-1)",
+        "Modular/TIMING:OSA/VALUE_1:getdata(Self,1406197902)/healhp(Self,VALUE_1)",
+        "Modular/TIMING:StartBattle/VALUE_2:getdata(Self,1406197903)/healhp(Self,VALUE_2)",
+        "Modular/TIMING:OSA/VALUE_3:getdata(Self,1406197904)/breakdmg(Self,VALUE_3)",
+        "Modular/TIMING:WH/VALUE_4:getdata(Target,1406197905)/breakdmg(Target,VALUE_4)",
+        "Modular/TIMING:RoundStart/VALUE_0:getdata(Self,14461979)/VALUE_5:getdata(Self,1406197906)/IF(VALUE_0=0):shield(Self,VALUE_5,perm):setdata(Self,14461979,1)",
+        "Modular/TIMING:StartBattle/VALUE_6:getdata(Self,1406197907)/shield(Self,VALUE_6,perm)",
+        "Modular/TIMING:StartBattle/VALUE_7:getdata(Self,1406197908)/shield(Self,VALUE_7)",
+        "Modular/TIMING:RoundStart/VALUE_8:getdata(Self,1406197909)/mpdmg(Self,VALUE_8)",
+        "Modular/TIMING:WinDuel/VALUE_8:getdata(Self,1406197910)/mpdmg(Self,VALUE_8)",
+        "Modular/TIMING:DefeatDuel/VALUE_8:getdata(Self,1406197911)/mpdmg(Self,VALUE_8)"
+      ]
+    }
+  ]
+}

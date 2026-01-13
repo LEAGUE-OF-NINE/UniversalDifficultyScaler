@@ -1,0 +1,16 @@
+{
+  "DifficultModder": {
+    "a": 0,
+    "id": "DifficultModder",
+    "name": "Dynamic Difficulty Modifiers",
+    "desc": "Does the Thing",
+    "summary": ""
+  },
+  "DifficultModderPlayer": {
+    "a": 0,
+    "id": "DifficultModderPlayer",
+    "name": "Dynamic Difficulty Modifiers",
+    "desc": "Does the Thing",
+    "summary": ""
+  }
+}
