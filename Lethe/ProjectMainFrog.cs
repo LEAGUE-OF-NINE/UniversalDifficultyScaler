@@ -18,18 +18,26 @@ namespace DifficultySliderMod;
 
 [BepInPlugin(GUID, NAME, VERSION)]
 [BepInDependency("Lethe")]
+[BepInDependency("GlitchGames.ModularSkillScripts")]
 public class FrogMain : BasePlugin
 {
-    public const string NAME = "FroggoDifficultyAdder";
-    public const string VERSION = "1.0.0";
+    public const string NAME = "xFroggoDifficultyAdder";
+    public const string VERSION = "1.2.0";
     public const string AUTHOR = "Froggo";
     public const string GUID = AUTHOR + "." + NAME;
 
     public static BUFF_UNIQUE_KEYWORD buf_keyword = CustomBuffs.ParseBuffUniqueKeyword("DifficultModder");
+    public static BUFF_UNIQUE_KEYWORD buf_keywordPlayer = CustomBuffs.ParseBuffUniqueKeyword("DifficultModderPlayer");
 
     public static class GlobalData
     {
         public static Dictionary<string, float> MyData { get; set; }
+        public static Dictionary<string, float> MyDataModularOverrides { get; set; }
+        public static Dictionary<string, float> MyDataTwo { get; set; }
+        public static Dictionary<string, float> MyDataModularOverridesTwo { get; set; }
+        
+        public static Dictionary<string, int> ModularOverridesDataIDs { get; set; } = new Dictionary<string, int>();
+
     }
 
 

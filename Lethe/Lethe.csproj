@@ -45,6 +45,9 @@
 	  <Reference Include="Merged">
 		  <HintPath>D:\Zwei\game\BepInEx\plugins\Lethe.dll</HintPath>
 	  </Reference>
+	  <Reference Include="ModularSkillScripts">
+	    <HintPath>D:\Zwei\LetheLauncher-Distribution-7\BepInEx\plugins\ModularSkillScripts.dll</HintPath>
+	  </Reference>
     <Reference Include="System.Runtime" />
     <Reference Include="$(LimbusCompanyFolder)\BepInEx\core\*.dll">
       <HintPath>%(Identity)</HintPath>

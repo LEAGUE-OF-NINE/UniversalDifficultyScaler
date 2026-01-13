@@ -11,29 +11,84 @@ class JsonEditorApp:
         self.root.bind("<Return>", self.handle_enter)
 
         self.slider_ranges = {
+            "Positive Coin Power Up": (-5, 10),
             "Negative Coin Power Up": (-5, 10),
-            "Final Power Up": (0, 20),
-            "Clash Power Up": (0, 20),
+            "Final Power Up": (-5, 20),
+            "Clash Power Up": (-5, 20),
             "Min Speed Adder": (-10, 10),
             "Max Speed Adder": (-10, 10),
-            "Max HP Multiplier": (0.00, 5),
+            "Max HP Multiplier": (0.00, 5.00),
             "Defense Level": (-20, 20),
             "Offense Level": (-50, 50),
-            "Damage Taken": (0.00, 2),
-            "Damage Dealt": (0, 2),
-            "Combat Start Shield": (0, 5000),
+            "Damage Taken": (0.00, 2.00),
+            "Damage Dealt": (0.00, 2.00),
+            "Encounter Start Shield": (0, 500),
+            "Combat Start Shield (Stacking)": (0, 500),
+            "Combat Start Shield (Non-Stacking)": (0, 500),
             "Slash Resistance": (-2.0, 2.0),
             "Pierce Resistance": (-2.0, 2.0),
             "Blunt Resistance": (-2.0, 2.0),
+            "Bonus Damage On Hit": (0, 200),
+            "Bonus Flat Healing On Hit": (0, 200),
+            "Round Start SP Healing": (-45, 45),
+            "Clash Win SP Healing": (-45, 45),
+            "Clash Lose SP Healing": (-45, 45)
         }
 
+        self.keys = [
+            "Positive Coin Power Up",
+            "Negative Coin Power Up",
+            "Final Power Up",
+            "Clash Power Up",
+            "Min Speed Adder",
+            "Max Speed Adder",
+            "Max HP Multiplier",
+            "Defense Level",
+            "Offense Level",
+            "Damage Taken",
+            "Damage Dealt",
+            "Encounter Start Shield",
+            "Combat Start Shield (Stacking)",
+            "Combat Start Shield (Non-Stacking)",
+            "Slash Resistance",
+            "Pierce Resistance",
+            "Blunt Resistance",
+            "Bonus Damage On Hit",
+            "Bonus Flat Healing On Hit",
+            "Bonus Flat Healing On Combat Start",
+            "Change Stagger On Self On Hit",
+            "Change Stagger On Self When Hit",
+            "Round Start SP Healing",
+            "Clash Win SP Healing",
+            "Clash Lose SP Healing"
+        ]
 
-        self.data = {}
-        self.entries = {}
-        self.sliders = {}
+        self.enemy_data = {}
+        self.player_data = {}
 
-        self.choose_button = tk.Button(root, text="Select Limbus Company Folder", command=self.load_json)
-        self.choose_button.pack(pady=10)
+        self.enemy_entries = {}
+        self.player_entries = {}
+
+        self.enemy_sliders = {}
+        self.player_sliders = {}
+
+        button_frame = tk.Frame(root)
+        button_frame.pack(pady=10)
+
+        self.choose_button = tk.Button(
+            button_frame,
+            text="Select Limbus Company Folder",
+            command=self.load_json
+        )
+        self.choose_button.pack(side="left", padx=5)
+
+        self.save_button = tk.Button(
+            button_frame,
+            text="Save Changes",
+            command=self.save_json
+        )
+        self.save_button.pack(side="left", padx=5)
+
 
         self.canvas = tk.Canvas(root)
         self.scroll_y = tk.Scrollbar(root, orient="vertical", command=self.canvas.yview)
@@ -47,57 +102,46 @@ class JsonEditorApp:
         self.canvas.pack(side="left", fill="both", expand=True)
         self.scroll_y.pack(side="right", fill="y")
 
-        self.save_button = tk.Button(root, text="Save Changes", command=self.save_json)
-        self.save_button.pack(pady=10)
+        self.canvas.bind_all("<MouseWheel>", self.handle_mousewheel)
+        self.canvas.bind_all("<Button-4>", self.handle_mousewheel)
+        self.canvas.bind_all("<Button-5>", self.handle_mousewheel) 
 
     def handle_enter(self, event):
         self.save_json()
+    
+    def handle_mousewheel(self, event):
+        if event.delta:
+            self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        
+        elif event.num == 4:
+            self.canvas.yview_scroll(-1, "units")
+        elif event.num == 5:
+            self.canvas.yview_scroll(1, "units")
+
 
     def load_json(self):
         folder = filedialog.askdirectory(title="Select Limbus Company Folder")
         if not folder:
             return
 
-        json_path = os.path.join(folder, "BepInEx", "plugins", "data.json")
+        base = os.path.join(folder, "BepInEx", "plugins")
+        self.enemy_path = os.path.join(base, "dynamicdifficultydata.json")
+        self.player_path = os.path.join(base, "dynamicdifficultydataforplayers.json")
 
-        if not os.path.exists(json_path):
-            os.makedirs(os.path.dirname(json_path), exist_ok=True)
+        os.makedirs(base, exist_ok=True)
 
-            default_keys = [
-                "Positive Coin Power Up",
-                "Negative Coin Power Up",
-                "Final Power Up",
-                "Clash Power Up",
-                "Min Speed Adder",
-                "Max Speed Adder",
-                "Max HP Multiplier",
-                "Defense Level",
-                "Offense Level",
-                "Damage Taken",
-                "Damage Dealt",
-                "Combat Start Shield",
-                "Slash Resistance",
-                "Pierce Resistance",
-                "Blunt Resistance"
+        def load_or_create(path):
+            if not os.path.exists(path):
+                data = {k: 0 for k in self.keys}
+                with open(path, "w", encoding="utf-8") as f:
+                    json.dump(data, f, indent=4)
+                return data
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
 
+        self.enemy_data = load_or_create(self.enemy_path)
+        self.player_data = load_or_create(self.player_path)
 
-
-            ]
-            self.data = {key: 0 for key in default_keys}
-
-            with open(json_path, "w", encoding="utf-8") as file:
-                json.dump(self.data, file, indent=4)
-
-            # messagebox.showinfo("Info", f"No data.json found. A new one was created at:\n{json_path}")
-        else:
-            with open(json_path, "r", encoding="utf-8") as file:
-                try:
-                    self.data = json.load(file)
-                except json.JSONDecodeError as e:
-                    messagebox.showerror("Error", f"Invalid JSON:\n{e}")
-                    return
-
-        self.json_path = json_path
         self.display_fields()
 
 
@@ -105,67 +149,88 @@ class JsonEditorApp:
         for widget in self.frame.winfo_children():
             widget.destroy()
 
-        self.entries.clear()
-        self.sliders.clear()
+        self.enemy_entries.clear()
+        self.player_entries.clear()
+        self.enemy_sliders.clear()
+        self.player_sliders.clear()
 
-        for i, (key, value) in enumerate(self.data.items()):
-            tk.Label(self.frame, text=key).grid(row=i, column=0, sticky='w', padx=5, pady=5)
+        row = 0
 
-            entry = tk.Entry(self.frame, width=40)
-            entry.grid(row=i, column=1, padx=5, pady=5)
+        def section_title(text):
+            nonlocal row
+            lbl = tk.Label(self.frame, text=text, font=("Arial", 12, "bold"))
+            lbl.grid(row=row, column=0, columnspan=3, pady=(15, 5), sticky="w")
+            row += 1
 
-            if isinstance(value, (int, float)):
-                # Set default slider range: 0–200, can be adjusted
+        def build_section(data, entries, sliders):
+            nonlocal row
+            for key in self.keys:
+                value = data.get(key, 0)
+
+                tk.Label(self.frame, text=key).grid(row=row, column=0, sticky="w", padx=5)
+
+                entry = tk.Entry(self.frame, width=20)
+                entry.grid(row=row, column=1, padx=5)
+                entry.insert(0, str(value))
+
+                min_val, max_val = self.slider_ranges.get(key, (-50, 200))
                 slider = tk.Scale(
-                    self.frame, from_=-50, to=200,
-                    orient="horizontal", length=150,
+                    self.frame,
+                    from_=min_val,
+                    to=max_val,
+                    orient="horizontal",
+                    length=180,
                     resolution=0.1 if isinstance(value, float) else 1,
                 )
-                slider.grid(row=i, column=2, padx=5, pady=5)
-
-                entry.insert(0, str(value))
+                slider.grid(row=row, column=2, padx=5)
                 slider.set(value)
 
-                # Link slider and entry
-                def make_sync_functions(k, is_float):
-                    def slider_to_entry(val):
-                        self.entries[k].delete(0, tk.END)
-                        self.entries[k].insert(0, str(round(float(val), 2) if is_float else int(float(val))))
-                    def entry_to_slider(event):
-                        try:
-                            v = float(self.entries[k].get())
-                            self.sliders[k].set(v)
-                        except ValueError:
-                            pass
-                    return slider_to_entry, entry_to_slider
+                def slider_to_entry(val, entry=entry, is_float=isinstance(value, float)):
+                    entry.delete(0, tk.END)
+                    entry.insert(
+                        0,
+                        str(round(float(val), 2) if is_float else int(float(val)))
+                    )
 
-                s2e, e2s = make_sync_functions(key, isinstance(value, float))
-                slider.config(command=s2e)
-                entry.bind("<KeyRelease>", e2s)
+                def entry_to_slider(event, slider=slider):
+                    try:
+                        slider.set(float(entry.get()))
+                    except ValueError:
+                        pass
 
-                self.sliders[key] = slider
-            else:
-                entry.insert(0, str(value))
+                slider.config(command=slider_to_entry)
+                entry.bind("<KeyRelease>", entry_to_slider)
 
-            self.entries[key] = entry
+
+                entries[key] = entry
+                sliders[key] = slider
+                row += 1
+
+        section_title("Enemy Modifiers")
+        build_section(self.enemy_data, self.enemy_entries, self.enemy_sliders)
+
+        section_title("Player Modifiers")
+        build_section(self.player_data, self.player_entries, self.player_sliders)
 
     def save_json(self):
-        for key, entry in self.entries.items():
-            val = entry.get()
-            try:
-                if '.' in val:
-                    self.data[key] = float(val)
-                elif val.isdigit() or (val.startswith('-') and val[1:].isdigit()):
-                    self.data[key] = int(val)
-                else:
-                    self.data[key] = val
-            except ValueError:
-                self.data[key] = val
+        def extract(entries, target):
+            for k, e in entries.items():
+                val = e.get()
+                try:
+                    target[k] = float(val) if "." in val else int(val)
+                except ValueError:
+                    target[k] = val
 
-        with open(self.json_path, "w", encoding="utf-8") as file:
-            json.dump(self.data, file, indent=4)
+        extract(self.enemy_entries, self.enemy_data)
+        extract(self.player_entries, self.player_data)
 
-        messagebox.showinfo("Success", "Changes saved!")
+        with open(self.enemy_path, "w", encoding="utf-8") as f:
+            json.dump(self.enemy_data, f, indent=4)
+
+        with open(self.player_path, "w", encoding="utf-8") as f:
+            json.dump(self.player_data, f, indent=4)
+
+        messagebox.showinfo("Success", "Enemy and Player modifiers saved!")
 
 if __name__ == "__main__":
     root = tk.Tk()
